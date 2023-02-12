@@ -41,18 +41,13 @@ app.use((err, req, res, next) => {
   let message = err.message;
   let statusCode = 500;
 
-  if (err.name === "CastError") {
-    message = `Invalid ${err.path}: ${err.value}`;
-    statusCode = 400;
-  }
-
   if (err.name === "ValidationError") {
     statusCode = 400;
   }
 
   if (err.code === 11000) {
     const value = err.errmsg.match(/(["'])(?:(?=(\\?))\2.)*?\1/)[0];
-    message = `A game with name: ${value} already exists. Please use anothe name!`;
+    message = `A game with name/url: ${value} already exists!`;
     statusCode = 400;
   }
 
