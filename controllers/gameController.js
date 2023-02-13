@@ -19,7 +19,7 @@ exports.create = catchAsync(async (req, res, next) => {
 exports.findAll = catchAsync(async (req, res, next) => {
   await Game.find()
     .then((doc) => {
-      res.send(doc);
+      res.send({ games: doc });
     })
     .catch((err) => {
       res.status(500).send({
@@ -39,9 +39,10 @@ exports.findOne = catchAsync(async (req, res, next) => {
 });
 
 exports.update = catchAsync(async (req, res, next) => {
-  if (!req.body) {
+  console.log(req.body);
+  if (Object.keys(req.body).length === 0) {
     return res.status(400).send({
-      message: "Data to update can not be empty!",
+      message: "Data to update cannot be empty!",
     });
   }
 
@@ -51,7 +52,7 @@ exports.update = catchAsync(async (req, res, next) => {
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot update Game with id=${id}. Maybe Game was not found!`,
+          message: "Not found Game with id " + id,
         });
       } else {
         if (req.body.publishedDate) {
@@ -59,7 +60,7 @@ exports.update = catchAsync(async (req, res, next) => {
             message: "Published Date cannot be updated!",
           });
         }
-        res.send({ message: "Game was updated successfully." });
+        res.send({ message: "Game was updated successfully.", game: data });
       }
     })
     .catch((err) => {
@@ -76,7 +77,7 @@ exports.delete = catchAsync(async (req, res, next) => {
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Cannot delete Game with id=${id}. Maybe Tutorial was not found!`,
+          message: "Not found Game with id " + id,
         });
       } else {
         res.send({

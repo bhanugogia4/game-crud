@@ -23,7 +23,7 @@ const GameSchema = new Schema(
       immutable: true,
     },
   },
-  { __v: { type: Number, select: false } }
+  { versionKey: false }
 );
 
 const Game = mongoose.model("game", GameSchema);
